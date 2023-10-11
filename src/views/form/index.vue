@@ -29,241 +29,239 @@
 </template>
 
 <script lang="ts" setup>
-import { FormOptions, FormInstance } from '@/components/Form/types/types.ts'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import Wform from '@/components/Form/index.vue'
-import utils from '@/utils/util.ts'
-import { ref } from 'vue'
-import { uploadActivityImage } from '@/api/activity/index'
+import { FormOptions, FormInstance } from "@/components/Form/types/types.ts"
+import { ElMessage, ElMessageBox } from "element-plus"
+import Wform from "@/components/Form/index.vue"
+import utils from "@/utils/util.ts"
+import { ref } from "vue"
+import { uploadActivityImage } from "@/api/activity/index"
 
-let form = ref()
+const form = ref()
 
 interface Scope {
   form: FormInstance
   model: any
 }
 
-let options: FormOptions[] = [
+const options: FormOptions[] = [
   {
-    type: 'input',
-    value: '',
-    label: '活动标题',
-    prop: 'title',
+    type: "input",
+    value: "",
+    label: "活动标题",
+    prop: "title",
     rules: [
       {
         required: true,
-        message: '活动标题不能为空',
-        trigger: 'blur',
+        message: "活动标题不能为空",
+        trigger: "blur"
       },
       {
         min: 4,
         max: 15,
-        message: '活动标题在4-15位置之间',
-        trigger: 'blur',
-      },
+        message: "活动标题在4-15位置之间",
+        trigger: "blur"
+      }
     ],
     attrs: {
-      clearable: true,
-    },
+      clearable: true
+    }
   },
   {
-    type: 'input',
-    value: '',
-    label: '参与对象',
-    prop: 'scope',
+    type: "input",
+    value: "",
+    label: "参与对象",
+    prop: "scope",
     rules: [
       {
         required: true,
-        message: '参与对象不能为空',
-        trigger: 'blur',
+        message: "参与对象不能为空",
+        trigger: "blur"
       },
       {
         min: 6,
         max: 10,
-        message: '长度6-10位置之间',
-        trigger: 'blur',
-      },
+        message: "长度6-10位置之间",
+        trigger: "blur"
+      }
     ],
     attrs: {
-      clearable: true,
-    },
+      clearable: true
+    }
   },
   {
-    type: 'input',
-    value: '',
-    label: '活动地点',
-    prop: 'place',
+    type: "input",
+    value: "",
+    label: "活动地点",
+    prop: "place",
     rules: [
       {
         required: true,
-        message: '活动地点不能为空',
-        trigger: 'blur',
+        message: "活动地点不能为空",
+        trigger: "blur"
       },
       {
         min: 6,
         max: 20,
-        message: '长度6-20位置之间',
-        trigger: 'blur',
-      },
+        message: "长度6-20位置之间",
+        trigger: "blur"
+      }
     ],
     attrs: {
-      clearable: true,
-    },
+      clearable: true
+    }
   },
   {
-    type: 'input',
-    value: '',
-    label: '参与人数',
-    prop: 'number',
+    type: "input",
+    value: "",
+    label: "参与人数",
+    prop: "number",
     rules: [
       {
         required: true,
-        message: '参与人数不能为空',
-        trigger: 'blur',
+        message: "参与人数不能为空",
+        trigger: "blur"
       },
       {
         min: 1,
         max: 5,
-        message: '长度1-5位置之间',
-        trigger: 'blur',
-      },
+        message: "长度1-5位置之间",
+        trigger: "blur"
+      }
     ],
     attrs: {
-      clearable: true,
-    },
+      clearable: true
+    }
   },
   {
-    type: 'input',
-    value: '',
-    label: '联系人',
-    prop: 'contact',
+    type: "input",
+    value: "",
+    label: "联系人",
+    prop: "contact",
     rules: [
       {
         required: true,
-        message: '联系人不能为空',
-        trigger: 'blur',
+        message: "联系人不能为空",
+        trigger: "blur"
       },
       {
         min: 2,
         max: 10,
-        message: '长度2-10位置之间',
-        trigger: 'blur',
-      },
+        message: "长度2-10位置之间",
+        trigger: "blur"
+      }
     ],
     attrs: {
-      clearable: true,
-    },
+      clearable: true
+    }
   },
   {
-    type: 'input',
-    value: '',
-    label: '联系电话',
-    prop: 'contact_way',
+    type: "input",
+    value: "",
+    label: "联系电话",
+    prop: "contact_way",
     rules: [
       {
         required: true,
-        message: '联系电话不能为空',
-        trigger: 'blur',
+        message: "联系电话不能为空",
+        trigger: "blur"
       },
       {
         min: 6,
         max: 11,
-        message: '长度6-11位置之间',
-        trigger: 'blur',
-      },
+        message: "长度6-11位置之间",
+        trigger: "blur"
+      }
     ],
     attrs: {
-      clearable: true,
-    },
+      clearable: true
+    }
   },
   {
-    type: 'upload',
-    label: '上传',
-    prop: 'pic',
+    type: "upload",
+    label: "上传",
+    prop: "pic",
     uploadAttrs: {
-      action: '#',
+      action: "#",
       multiple: true,
       // 图片大小可以设置大一些，自定义的处理事件中有图片压缩的方法
-      limit: 20,
+      limit: 20
     },
     rules: [
       {
         required: true,
-        message: '请上传活动宣传图',
-        trigger: 'blur',
-      },
-    ],
+        message: "请上传活动宣传图",
+        trigger: "blur"
+      }
+    ]
   },
   {
-    type: 'editor',
-    value: '',
-    prop: 'desc',
-    placeholder: '请输入内容',
-    label: '描述',
+    type: "editor",
+    value: "",
+    prop: "desc",
+    placeholder: "请输入内容",
+    label: "描述",
     rules: [
       {
         required: true,
-        message: '描述不能为空',
-      },
-    ],
-  },
+        message: "描述不能为空"
+      }
+    ]
+  }
 ]
 
-let submitForm = (scope: Scope) => {
+const submitForm = (scope: Scope) => {
   scope.form.validate((valid) => {
     if (valid) {
       console.log(scope.model)
-      ElMessage.success('提交成功')
+      ElMessage.success("提交成功")
       // resetForm()
     } else {
-      ElMessage.error('表单填写错误')
+      ElMessage.error("表单填写错误")
     }
   })
 }
 
-let resetForm = () => {
-  console.log('重置')
+const resetForm = () => {
+  console.log("重置")
   form.value.resetFields()
 }
 
-let handleHttpRequest = async (file: any) => {
-  let sawFile = file.file
-  let fileName = sawFile.name
+const handleHttpRequest = async (file: any) => {
+  const sawFile = file.file
+  const fileName = sawFile.name
   // 文件转base64
-  let base64 = await utils.fileToDataURL(sawFile)
-  let newBase64 = await utils.compressionFile(fileName, base64, 0.5)
+  const base64 = await utils.fileToDataURL(sawFile)
+  const newBase64 = await utils.compressionFile(fileName, base64, 0.5)
   try {
-    let result = await uploadActivityImage(newBase64)
+    const result = await uploadActivityImage(newBase64)
     // 这里需要根据后端再做错误处理
     file.onSuccess(result.data.img)
     console.log(result)
   } catch {
-    console.log('错误')
+    console.log("错误")
   }
 }
 
-let handleRemove = (file: any, fileList: any) => {}
+const handleRemove = (file: any, fileList: any) => {}
 
-let handlePreview = (file: any) => {}
+const handlePreview = (file: any) => {}
 
-let beforeRemove = (val: any) => {
+const beforeRemove = (val: any) => {
   return ElMessageBox.confirm(`确认删除图片 ${val.file.name} ?`)
 }
 
-let handleExceed = (val: any) => {
-  console.log('handleExceed', val)
+const handleExceed = (val: any) => {
+  console.log("handleExceed", val)
   ElMessage.warning(
-    `The limit is 20, you selected ${
-      val.files.length
-    } files this time, add up to ${
+    `The limit is 20, you selected ${val.files.length} files this time, add up to ${
       val.files.length + val.fileList.length
-    } totally`,
+    } totally`
   )
 }
 
-let handleSuccess = (val: any) => {}
+const handleSuccess = (val: any) => {}
 
-let handleChange = (val: any) => {}
+const handleChange = (val: any) => {}
 
-let handleBeforeUpload = (val: any) => {}
+const handleBeforeUpload = (val: any) => {}
 </script>

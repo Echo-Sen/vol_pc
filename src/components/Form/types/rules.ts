@@ -1,22 +1,22 @@
 // >>>>> Rule
 // Modified from https://github.com/yiminghe/async-validator/blob/0d51d60086a127b21db76f44dff28ae18c165c47/src/index.d.ts
 export type RuleType =
-  | 'string'
-  | 'number'
-  | 'boolean'
-  | 'method'
-  | 'regexp'
-  | 'integer'
-  | 'float'
-  | 'array'
-  | 'object'
-  | 'enum'
-  | 'date'
-  | 'url'
-  | 'hex'
-  | 'email'
-  | 'pattern'
-  | 'any'
+  | "string"
+  | "number"
+  | "boolean"
+  | "method"
+  | "regexp"
+  | "integer"
+  | "float"
+  | "array"
+  | "object"
+  | "enum"
+  | "date"
+  | "url"
+  | "hex"
+  | "email"
+  | "pattern"
+  | "any"
 
 export interface ValidateOption {
   // whether to suppress internal warning
@@ -60,14 +60,14 @@ export interface RuleItem {
     value: Value,
     callback: (error?: string | Error) => void,
     source: Values,
-    options: ValidateOption,
+    options: ValidateOption
   ) => void | Promise<void>
   validator?: (
     rule: InternalRuleItem,
     value: Value,
     callback: (error?: string | Error) => void,
     source: Values,
-    options: ValidateOption,
+    options: ValidateOption
   ) => SyncValidateResult | void
 }
 
@@ -93,7 +93,7 @@ export type ExecuteRule = (
   source: Values,
   errors: string[],
   options: ValidateOption,
-  type?: string,
+  type?: string
 ) => void
 
 /**
@@ -111,13 +111,11 @@ export type ExecuteValidator = (
   value: Value,
   callback: (error?: string[]) => void,
   source: Values,
-  options: ValidateOption,
+  options: ValidateOption
 ) => void
 
 // >>>>> Message
-type ValidateMessage<T extends any[] = unknown[]> =
-  | string
-  | ((...args: T) => string)
+type ValidateMessage<T extends any[] = unknown[]> = string | ((...args: T) => string)
 type FullField = string | undefined
 type EnumString = string | undefined
 type Pattern = string | RegExp | undefined
@@ -189,10 +187,7 @@ export interface ValidateError {
 
 export type ValidateFieldsError = Record<string, ValidateError[]>
 
-export type ValidateCallback = (
-  errors: ValidateError[] | null,
-  fields: ValidateFieldsError | Values,
-) => void
+export type ValidateCallback = (errors: ValidateError[] | null, fields: ValidateFieldsError | Values) => void
 
 export interface RuleValuePackage {
   rule: InternalRuleItem
@@ -201,9 +196,9 @@ export interface RuleValuePackage {
   field: string
 }
 
-export interface InternalRuleItem extends Omit<RuleItem, 'validator'> {
+export interface InternalRuleItem extends Omit<RuleItem, "validator"> {
   field?: string
   fullField?: string
   fullFields?: string[]
-  validator?: RuleItem['validator'] | ExecuteValidator
+  validator?: RuleItem["validator"] | ExecuteValidator
 }

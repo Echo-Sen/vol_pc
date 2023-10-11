@@ -1,26 +1,14 @@
 <template>
-  <el-form
-    ref="form"
-    v-if="model"
-    :validate-on-rule-change="false"
-    :model="model"
-    :rules="rules"
-    v-bind="$attrs"
-  >
+  <el-form ref="form" v-if="model" :validate-on-rule-change="false" :model="model" :rules="rules" v-bind="$attrs">
     <template v-for="(item, index) in options" :key="index">
-      <el-form-item
-        v-if="!item.children || !item.children!.length"
-        :prop="item.prop"
-        :label="item.label"
-      >
+      <el-form-item v-if="!item.children || !item.children!.length" :prop="item.prop" :label="item.label">
         <component
           v-if="item.type !== 'upload' && item.type !== 'editor'"
           v-bind="item.attrs"
           :is="`el-${item.type}`"
           :placeholder="item.placeholder"
           v-model="model[item.prop!]"
-        >
-        </component>
+        />
         <el-upload
           v-if="item.type === 'upload'"
           v-bind="item.uploadAttrs"
@@ -35,28 +23,16 @@
           :http-request="httpRequest"
           :on-exceed="onExceed"
         >
-          <slot name="uploadArea"></slot>
-          <slot name="uploadTip"></slot>
+          <slot name="uploadArea" />
+          <slot name="uploadTip" />
         </el-upload>
 
         <div class="full-screen-container">
-          <div
-            id="toolbar"
-            v-if="item.type === 'editor'"
-            style="z-index: 101"
-          ></div>
-          <div
-            id="editor"
-            v-if="item.type === 'editor'"
-            style="height: 200px; z-index: 100"
-          ></div>
+          <div id="toolbar" v-if="item.type === 'editor'" style="z-index: 101" />
+          <div id="editor" v-if="item.type === 'editor'" style="height: 200px; z-index: 100" />
         </div>
       </el-form-item>
-      <el-form-item
-        v-if="item.children && item.children.length"
-        :prop="item.prop"
-        :label="item.label"
-      >
+      <el-form-item v-if="item.children && item.children.length" :prop="item.prop" :label="item.label">
         <component
           v-bind="item.attrs"
           :is="`el-${item.type}`"
@@ -69,74 +45,65 @@
             :is="`el-${child.type}`"
             :label="child.label"
             :value="child.value"
-          >
-          </component>
+          />
         </component>
       </el-form-item>
     </template>
     <el-form-item>
-      <slot name="action" :form="form" :model="model"></slot>
+      <slot name="action" :form="form" :model="model" />
     </el-form-item>
   </el-form>
 </template>
 <script lang="ts" setup>
-import { PropType, ref, onMounted, watch, nextTick } from 'vue'
-import { FormOptions, FormInstance } from './types/types'
-import cloneDeep from 'lodash/cloneDeep'
-import '@wangeditor/editor/dist/css/style.css'
-import {
-  createEditor,
-  createToolbar,
-  IEditorConfig,
-  IDomEditor,
-} from '@wangeditor/editor'
+import { PropType, ref, onMounted, watch, nextTick } from "vue"
+import { FormOptions, FormInstance } from "./types/types"
+import cloneDeep from "lodash/cloneDeep"
+import "@wangeditor/editor/dist/css/style.css"
+import { createEditor, createToolbar, IEditorConfig, IDomEditor } from "@wangeditor/editor"
 
-let props = defineProps({
+const props = defineProps({
   // 表单的配置项
   options: {
     type: Array as PropType<FormOptions[]>,
-    required: true,
+    required: true
   },
   // 用户自定义上传方法
   httpRequest: {
-    type: Function,
-  },
+    type: Function
+  }
 })
 
-let emits = defineEmits([
-  'on-preview',
-  'on-remove',
-  'on-success',
-  'on-error',
-  'on-progress',
-  'on-change',
-  'before-upload',
-  'before-remove',
-  'on-exceed',
-  'http-request',
+const emits = defineEmits([
+  "on-preview",
+  "on-remove",
+  "on-success",
+  "on-error",
+  "on-progress",
+  "on-change",
+  "before-upload",
+  "before-remove",
+  "on-exceed",
+  "http-request"
 ])
 
-let model = ref<any>(null)
-let rules = ref<any>(null)
-let edit = ref()
+const model = ref<any>(null)
+const rules = ref<any>(null)
+const edit = ref()
 
-let form = ref<FormInstance | null>()
+const form = ref<FormInstance | null>()
 
 // 初始化表单方法
-let initForm = () => {
+const initForm = () => {
   if (props.options && props.options.length) {
-    let m: any = {}
-    let r: any = {}
+    const m: any = {}
+    const r: any = {}
     props.options.map((item: FormOptions) => {
       m[item.prop!] = item.value
       r[item.prop!] = item.rules
       // 初始化富文本编辑器
-      if (item.type === 'editor') {
+      if (item.type === "editor") {
         nextTick(() => {
-          if (
-            document.getElementById('editor') &&
-            document.getElementById('toolbar')
-          ) {
+          if (document.getElementById("editor") && document.getElementById("toolbar")) {
             const editorConfig: Partial<IEditorConfig> = {}
             editorConfig.placeholder = item.placeholder!
             editorConfig.onChange = (editor: IDomEditor) => {
@@ -150,15 +117,15 @@ let initForm = () => {
 
             // 创建编辑器
             const editor = createEditor({
-              selector: '#editor',
+              selector: "#editor",
               config: editorConfig,
-              mode: 'default', // 或 'simple' 参考下文
+              mode: "default" // 或 'simple' 参考下文
             })
             // 创建工具栏
             const toolbar = createToolbar({
               editor,
-              selector: '#toolbar',
-              mode: 'default', // 或 'simple' 参考下文
+              selector: "#toolbar",
+              mode: "default" // 或 'simple' 参考下文
             })
             edit.value = editor
           }
@@ -174,7 +141,7 @@ onMounted(() => {
 })
 
 // 组件重写表单重置的方法
-let resetFields = () => {
+const resetFields = () => {
   // 1、重置element-plus 的表单
   form.value!.resetFields()
   // 2、重置富文本编辑器的内容
@@ -185,12 +152,12 @@ let resetFields = () => {
 }
 
 // 表单验证
-let validate = () => {
+const validate = () => {
   return form.value!.validate
 }
 
 // 获取表单数据
-let getFormData = () => {
+const getFormData = () => {
   return model.value
 }
 
@@ -198,7 +165,7 @@ let getFormData = () => {
 defineExpose({
   resetFields,
   validate,
-  getFormData,
+  getFormData
 })
 
 // 监听父组件传递过来的options
@@ -207,50 +174,50 @@ watch(
   () => {
     initForm()
   },
-  { deep: true },
+  { deep: true }
 )
 
 // 上传组件的所有方法
-let onPreview = (file: File) => {
-  emits('on-preview', file)
+const onPreview = (file: File) => {
+  emits("on-preview", file)
 }
 
-let onRemove = (file: File, fileList: FileList) => {
-  emits('on-remove', { file, fileList })
+const onRemove = (file: File, fileList: FileList) => {
+  emits("on-remove", { file, fileList })
 }
 
-let httpRequest = (file: File) => {
-  emits('http-request', file)
+const httpRequest = (file: File) => {
+  emits("http-request", file)
 }
 
-let onSuccess = (response: any, file: File, fileList: FileList) => {
+const onSuccess = (response: any, file: File, fileList: FileList) => {
   // 上传图片成功， 给表单上传项赋值
-  let uploadItem = props.options.find((item) => item.type === 'upload')!
+  const uploadItem = props.options.find((item) => item.type === "upload")!
   model.value[uploadItem.prop!] = response
-  emits('on-success', response)
+  emits("on-success", response)
 }
 
-let onError = (err: any, file: File, fileList: FileList) => {
-  emits('on-error', { err, file, fileList })
+const onError = (err: any, file: File, fileList: FileList) => {
+  emits("on-error", { err, file, fileList })
 }
 
-let onProgress = (event: any, file: File, fileList: FileList) => {
-  emits('on-progress', { event, file, fileList })
+const onProgress = (event: any, file: File, fileList: FileList) => {
+  emits("on-progress", { event, file, fileList })
 }
 
-let onChange = (file: File, fileList: FileList) => {
-  emits('on-change', { file, fileList })
+const onChange = (file: File, fileList: FileList) => {
+  emits("on-change", { file, fileList })
 }
 
-let beforeUpload = (file: File) => {
-  emits('before-upload', file)
+const beforeUpload = (file: File) => {
+  emits("before-upload", file)
 }
 
-let beforeRemove = (file: File, fileList: FileList) => {
-  emits('before-remove', { file, fileList })
+const beforeRemove = (file: File, fileList: FileList) => {
+  emits("before-remove", { file, fileList })
 }
 
-let onExceed = (file: File, fileList: FileList) => {
-  emits('on-exceed', { file, fileList })
+const onExceed = (file: File, fileList: FileList) => {
+  emits("on-exceed", { file, fileList })
 }
 </script>

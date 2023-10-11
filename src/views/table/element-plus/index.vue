@@ -1,48 +1,30 @@
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
-import {
-  createTableDataApi,
-  deleteTableDataApi,
-  updateTableDataApi,
-  getTableDataApi,
-} from '@/api/table'
-import { type GetTableData } from '@/api/table/types/table'
-import {
-  type FormInstance,
-  type FormRules,
-  ElMessage,
-  ElMessageBox,
-} from 'element-plus'
-import {
-  Search,
-  Refresh,
-  CirclePlus,
-  Delete,
-  Download,
-  RefreshRight,
-} from '@element-plus/icons-vue'
-import { usePagination } from '@/hooks/usePagination'
-import Form from '@/views/form/index.vue'
+import { reactive, ref, watch } from "vue"
+import { createTableDataApi, deleteTableDataApi, updateTableDataApi, getTableDataApi } from "@/api/table"
+import { type GetTableData } from "@/api/table/types/table"
+import { type FormInstance, type FormRules, ElMessage, ElMessageBox } from "element-plus"
+import { Search, Refresh, CirclePlus, Delete, Download, RefreshRight } from "@element-plus/icons-vue"
+import { usePagination } from "@/hooks/usePagination"
+import Form from "@/views/form/index.vue"
 
 defineOptions({
   // 命名当前组件
-  name: '志愿活动管理',
+  name: "志愿活动管理"
 })
 
 const loading = ref<boolean>(false)
-const { paginationData, handleCurrentChange, handleSizeChange } =
-  usePagination()
+const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
 //#region 增
 const dialogVisible = ref<boolean>(false)
 const formRef = ref<FormInstance | null>(null)
 const formData = reactive({
-  username: '',
-  password: '',
+  username: "",
+  password: ""
 })
 const formRules: FormRules = reactive({
-  username: [{ required: true, trigger: 'blur', message: '请输入用户名' }],
-  password: [{ required: true, trigger: 'blur', message: '请输入密码' }],
+  username: [{ required: true, trigger: "blur", message: "请输入用户名" }],
+  password: [{ required: true, trigger: "blur", message: "请输入密码" }]
 })
 const handleCreate = () => {
   formRef.value?.validate((valid: boolean, fields) => {
@@ -50,7 +32,7 @@ const handleCreate = () => {
       if (currentUpdateId.value === undefined) {
         createTableDataApi(formData)
           .then(() => {
-            ElMessage.success('新增成功')
+            ElMessage.success("新增成功")
             getTableData()
           })
           .finally(() => {
@@ -59,10 +41,10 @@ const handleCreate = () => {
       } else {
         updateTableDataApi({
           id: currentUpdateId.value,
-          username: formData.username,
+          username: formData.username
         })
           .then(() => {
-            ElMessage.success('修改成功')
+            ElMessage.success("修改成功")
             getTableData()
           })
           .finally(() => {
@@ -70,26 +52,26 @@ const handleCreate = () => {
           })
       }
     } else {
-      console.error('表单校验不通过', fields)
+      console.error("表单校验不通过", fields)
     }
   })
 }
 const resetForm = () => {
   currentUpdateId.value = undefined
-  formData.username = ''
-  formData.password = ''
+  formData.username = ""
+  formData.password = ""
 }
 //#endregion
 
 //#region 删
 const handleDelete = (row: GetTableData) => {
-  ElMessageBox.confirm(`正在删除用户：${row.username}，确认删除？`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
+  ElMessageBox.confirm(`正在删除用户：${row.username}，确认删除？`, "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
   }).then(() => {
     deleteTableDataApi(row.id).then(() => {
-      ElMessage.success('删除成功')
+      ElMessage.success("删除成功")
       getTableData()
     })
   })
@@ -109,8 +91,8 @@ const handleUpdate = (row: GetTableData) => {
 const tableData = ref<GetTableData[]>([])
 const searchFormRef = ref<FormInstance | null>(null)
 const searchData = reactive({
-  title: '',
-  phone: '',
+  title: "",
+  phone: ""
 })
 const getTableData = () => {
   loading.value = true
@@ -118,7 +100,7 @@ const getTableData = () => {
     currentPage: paginationData.currentPage,
     size: paginationData.pageSize,
     username: searchData.title || undefined,
-    phone: searchData.phone || undefined,
+    phone: searchData.phone || undefined
   })
     .then((res) => {
       console.log(res)
@@ -133,9 +115,7 @@ const getTableData = () => {
     })
 }
 const handleSearch = () => {
-  paginationData.currentPage === 1
-    ? getTableData()
-    : (paginationData.currentPage = 1)
+  paginationData.currentPage === 1 ? getTableData() : (paginationData.currentPage = 1)
 }
 const resetSearch = () => {
   searchFormRef.value?.resetFields()
@@ -144,11 +124,7 @@ const resetSearch = () => {
 //#endregion
 
 /** 监听分页参数的变化 */
-watch(
-  [() => paginationData.currentPage, () => paginationData.pageSize],
-  getTableData,
-  { immediate: true },
-)
+watch([() => paginationData.currentPage, () => paginationData.pageSize], getTableData, { immediate: true })
 </script>
 
 <template>
@@ -162,9 +138,7 @@ watch(
           <el-input v-model="searchData.phone" placeholder="请输入" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Search" @click="handleSearch"
-            >查询</el-button
-          >
+          <el-button type="primary" :icon="Search" @click="handleSearch">查询</el-button>
           <el-button :icon="Refresh" @click="resetSearch">重置</el-button>
         </el-form-item>
       </el-form>
@@ -172,12 +146,7 @@ watch(
     <el-card v-loading="loading" shadow="never">
       <div class="toolbar-wrapper">
         <div>
-          <el-button
-            type="primary"
-            :icon="CirclePlus"
-            @click="dialogVisible = true"
-            >新增活动</el-button
-          >
+          <el-button type="primary" :icon="CirclePlus" @click="dialogVisible = true">新增活动</el-button>
           <el-button type="danger" :icon="Delete">批量删除</el-button>
         </div>
         <div>
@@ -185,12 +154,7 @@ watch(
             <el-button type="primary" :icon="Download" circle />
           </el-tooltip>
           <el-tooltip content="刷新当前页">
-            <el-button
-              type="primary"
-              :icon="RefreshRight"
-              circle
-              @click="getTableData"
-            />
+            <el-button type="primary" :icon="RefreshRight" circle @click="getTableData" />
           </el-tooltip>
         </div>
       </div>
@@ -198,38 +162,17 @@ watch(
         <el-table :data="tableData">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column prop="title" label="标题" align="center" />
-          <el-table-column prop="detail" label="详情" align="center">
-          </el-table-column>
+          <el-table-column prop="detail" label="详情" align="center" />
           <el-table-column prop="phone" label="手机号" align="center" />
           <el-table-column prop="number" label="招收人数" align="center" />
-          <el-table-column prop="publisher" label="发布人" align="center">
-          </el-table-column>
+          <el-table-column prop="publisher" label="发布人" align="center" />
           <el-table-column prop="createTime" label="创建时间" align="center" />
           <el-table-column prop="start" label="开始时间" align="center" />
           <el-table-column prop="end" label="结束时间" align="center" />
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="150"
-            align="center"
-          >
+          <el-table-column fixed="right" label="操作" width="150" align="center">
             <template #default="scope">
-              <el-button
-                type="primary"
-                text
-                bg
-                size="small"
-                @click="handleUpdate(scope.row)"
-                >修改</el-button
-              >
-              <el-button
-                type="danger"
-                text
-                bg
-                size="small"
-                @click="handleDelete(scope.row)"
-                >删除</el-button
-              >
+              <el-button type="primary" text bg size="small" @click="handleUpdate(scope.row)">修改</el-button>
+              <el-button type="danger" text bg size="small" @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -254,7 +197,7 @@ watch(
       @close="resetForm"
       width="50%"
     >
-      <Form></Form>
+      <Form />
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="handleCreate">确认</el-button>

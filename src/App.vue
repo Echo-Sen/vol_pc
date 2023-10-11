@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { h } from 'vue'
-import { useTheme } from '@/hooks/useTheme'
-import { ElNotification } from 'element-plus'
+import { h } from "vue"
+import { useTheme } from "@/hooks/useTheme"
+import { ElNotification } from "element-plus"
 // 将 Element Plus 的语言设置为中文
-import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import zhCn from "element-plus/es/locale/lang/zh-cn"
 
 const { initTheme } = useTheme()
 
@@ -11,19 +11,19 @@ const { initTheme } = useTheme()
 initTheme()
 // 提示
 ElNotification({
-  title: '常青藤志愿服务后台管理系统',
-  type: 'success',
+  title: "常青藤志愿服务后台管理系统",
+  type: "success",
   message: h(
-    'a',
+    "a",
     {
-      style: 'color: teal',
-      target: '_blank',
-      href: 'http://www.olrando.cn',
+      style: "color: teal",
+      target: "_blank",
+      href: "http://www.olrando.cn"
     },
-    '学长开发不易记得坚持志愿服务哦',
+    "学长开发不易记得坚持志愿服务哦"
   ),
   duration: 0,
-  position: 'bottom-right',
+  position: "bottom-right"
 })
 </script>
 

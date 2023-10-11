@@ -1,6 +1,6 @@
-import { CSSProperties } from 'vue'
-import { RuleItem } from './rules'
-import { ValidateFieldsError } from 'async-validator'
+import { CSSProperties } from "vue"
+import { RuleItem } from "./rules"
+import { ValidateFieldsError } from "async-validator"
 
 interface Callback {
   (isValid: boolean, invalidFields?: ValidateFieldsError): void
@@ -10,27 +10,27 @@ interface Callback {
 export interface FormOptions {
   // 表单项显示的元素
   type:
-    | 'cascader'
-    | 'checkbox'
-    | 'checkbox-group'
-    | 'checkbox-button'
-    | 'color-picker'
-    | 'date-picker'
-    | 'input'
-    | 'input-number'
-    | 'radio'
-    | 'radio-group'
-    | 'radio-button'
-    | 'rate'
-    | 'select'
-    | 'option'
-    | 'slider'
-    | 'switch'
-    | 'time-picker'
-    | 'time-select'
-    | 'transfer'
-    | 'upload'
-    | 'editor'
+    | "cascader"
+    | "checkbox"
+    | "checkbox-group"
+    | "checkbox-button"
+    | "color-picker"
+    | "date-picker"
+    | "input"
+    | "input-number"
+    | "radio"
+    | "radio-group"
+    | "radio-button"
+    | "rate"
+    | "select"
+    | "option"
+    | "slider"
+    | "switch"
+    | "time-picker"
+    | "time-select"
+    | "transfer"
+    | "upload"
+    | "editor"
 
   value?: any // 表单项的值
   label?: string // 表单项label
@@ -51,7 +51,7 @@ export interface FormOptions {
   uploadAttrs?: {
     action: string
     header?: string
-    method?: 'post' | 'put' | 'patch'
+    method?: "post" | "put" | "patch"
     multiple?: boolean
     data?: any
     name?: string
@@ -60,7 +60,7 @@ export interface FormOptions {
     drag?: boolean
     accept?: string
     thumbnailMode?: boolean
-    listType?: 'text' | 'picture' | 'picture-card'
+    listType?: "text" | "picture" | "picture-card"
     autoUpload?: boolean
     limit?: number
   }

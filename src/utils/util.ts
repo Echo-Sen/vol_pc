@@ -19,14 +19,8 @@ class utils {
       img.src = dataURL
     })
   }
-  static canvastoFile = (
-    canvas: HTMLCanvasElement,
-    type: string,
-    quality: number,
-  ): Promise<Blob | null> => {
-    return new Promise((resolve) =>
-      canvas.toBlob((blob) => resolve(blob), type, quality),
-    )
+  static canvastoFile = (canvas: HTMLCanvasElement, type: string, quality: number): Promise<Blob | null> => {
+    return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), type, quality))
   }
 
   /**
@@ -36,13 +30,9 @@ class utils {
    * @param quality 压缩质量参数
    * @returns
    */
-  static compressionFile = async (
-    fileName: string,
-    base64: string,
-    quality = 0.2,
-  ) => {
-    const canvas = document.createElement('canvas')
-    const context = canvas.getContext('2d') as CanvasRenderingContext2D
+  static compressionFile = async (fileName: string, base64: string, quality = 0.2) => {
+    const canvas = document.createElement("canvas")
+    const context = canvas.getContext("2d") as CanvasRenderingContext2D
     const type = this.getImageTypeFromBase64(base64)
     const img = await this.dataURLToImage(base64)
     canvas.width = img.width
@@ -51,7 +41,7 @@ class utils {
     context.drawImage(img, 0, 0, img.width, img.height)
     const blob = (await this.canvastoFile(canvas, type, quality)) as Blob // quality:0.2可根据实际情况计算
     const newFile = await new File([blob], fileName, {
-      type: type,
+      type: type
     })
     const newBase64 = await this.fileToDataURL(newFile)
     return newBase64
@@ -59,10 +49,10 @@ class utils {
 
   static getImageTypeFromBase64 = (base64Data: string) => {
     // 检查base64数据是否以"data:"开头
-    if (base64Data.startsWith('data:')) {
+    if (base64Data.startsWith("data:")) {
       // 获取"data:"之后的部分，直到分号";"之前的内容
-      const startIndex = 'data:'.length
-      const endIndex = base64Data.indexOf(';')
+      const startIndex = "data:".length
+      const endIndex = base64Data.indexOf(";")
       if (endIndex !== -1) {
         // 提取图像类型
         const imageType = base64Data.slice(startIndex, endIndex)

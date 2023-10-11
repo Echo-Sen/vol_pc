@@ -1,4 +1,4 @@
-const SYSTEM_NAME = 'vol_ctbucqt'
+const SYSTEM_NAME = "vol_ctbucqt"
 
 /** 缓存数据时用到的 Key */
 class CacheKey {
